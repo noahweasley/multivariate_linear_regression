@@ -5,7 +5,6 @@ import 'package:multivariate_linear_regression/src/utils/matrix_ext.dart';
 
 /// {@template multivariate_linear_regression}
 /// Multivariate linear regression with optional intercept.
-/// Uses the pseudo-inverse to compute coefficients.
 /// {@endtemplate}
 class MultivariateLinearRegression {
   /// {@macro multivariate_linear_regression}
