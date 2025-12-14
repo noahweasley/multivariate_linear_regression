@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:multivariate_linear_regression/src/utils/matrix_ext.dart';
 
-/// Author: @noahweasley
+/// Author: Ebenmelu Ifechukwu @noahweasley
 ///
 /// {@template multivariate_linear_regression}
 /// Multivariate linear regression with optional intercept.
@@ -24,7 +24,7 @@ class MultivariateLinearRegression {
 
     if (intercept) {
       final ones = Vector.filled(_x.rowCount, 1);
-      _x = _x.insertColumns(_x.columnCount, List.from(ones));
+      _x = _x.insertColumns(_x.columnCount, [ones]);
     }
 
     _inputs = _x.columnCount - (intercept ? 1 : 0);
@@ -47,8 +47,8 @@ class MultivariateLinearRegression {
     );
   }
 
-  late final Matrix _x;
-  late final Matrix _y;
+  late Matrix _x;
+  late Matrix _y;
   late final Matrix _beta;
 
   late final int _inputs;
@@ -78,12 +78,10 @@ class MultivariateLinearRegression {
   double? get stdError => _variance == null ? null : sqrt(_variance!);
 
   /// Standard Error Matrix used for coefficient statistics
-  Matrix get stdErrorMatrix => _x.transpose().multiply(_x).pseudoInverse() * (_variance ?? 0);
+  Matrix get stdErrorMatrix => (_x.transpose() * _x).pseudoInverse() * (_variance ?? 0);
 
   /// Standard errors for each coefficient
-  List<double> get stdErrors {
-    return stdErrorMatrix.diagonal().map((d) => sqrt(d)).toList();
-  }
+  List<double> get stdErrors => stdErrorMatrix.diagonal().map((d) => sqrt(d)).toList();
 
   /// t-statistics for each coefficient
   List<double> get tStats {
@@ -95,19 +93,20 @@ class MultivariateLinearRegression {
     });
   }
 
-  Matrix _computeBeta() => _x.pseudoInverse().multiply(_y);
+  Matrix _computeBeta() => _x.pseudoInverse() * _y;
 
   double _computeVariance() {
-    final fittedValues = _x.multiply(_beta);
+    final fittedValues = _x * _beta;
     final residuals = _y - fittedValues;
 
+    //  final squaredSum = residuals.toList().expand((ri) => ri).map((v) => v * v).reduce((a, b) => a + b);
     final squaredSum = residuals.toList().map((ri) => pow(ri.first, 2)).reduce((a, b) => a + b);
 
     return squaredSum / (_y.rowCount - _x.columnCount);
   }
 
   ///
-  List<double> _predict(List<double> x) {
+  List<double> predict(List<double> x) {
     final result = List<double>.filled(outputs, 0);
 
     if (x.length != inputs) {
@@ -130,7 +129,7 @@ class MultivariateLinearRegression {
   }
 
   ///
-  List<List<double>> predict(List<List<double>> x) => x.map(_predict).toList();
+  List<List<double>> predictBatch(List<List<double>> x) => x.map(predict).toList();
 
   ///
   Map<String, dynamic> toJson() {

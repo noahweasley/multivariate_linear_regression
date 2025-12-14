@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:ml_linalg/matrix.dart';
 
-/// Author: @noahweasley
+/// Author: Ebenmelu Ifechukwu @noahweasley
 /// Utility extensions for Matrix
 extension MatrixExtension on Matrix {
   /// Computes the pseudo-inverse of the matrix
@@ -12,11 +12,12 @@ extension MatrixExtension on Matrix {
 
     if (rows >= cols) {
       final xt = transpose();
-      final xtx = xt.multiply(this);
-      return xtx.inverse().multiply(xt);
+      final xtx = xt * this;
+      return xtx.inverse() * xt;
     } else {
-      final xxT = multiply(transpose());
-      return transpose().multiply(xxT.inverse());
+      final xt = transpose();
+      final xxT = this * xt;
+      return transpose() * (xxT.inverse());
     }
   }
 
