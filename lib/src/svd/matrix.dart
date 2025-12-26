@@ -142,11 +142,6 @@ class Matrix {
   }
 
   /// Matrix subtraction.
-  ///
-  /// Used to compute residuals:
-  /// ```
-  /// residuals = Y − Ŷ
-  /// ```
   Matrix subtract(Matrix B) {
     if (rows != B.rows || cols != B.cols) {
       throw ArgumentError('Shape mismatch for subtraction');
@@ -164,11 +159,6 @@ class Matrix {
   }
 
   /// Concatenates another matrix to the right (column-wise).
-  ///
-  /// Used to append the intercept column of ones:
-  /// ```
-  /// X → [X | 1]
-  /// ```
   Matrix appendColumn(Matrix B) {
     if (rows != B.rows) {
       throw ArgumentError('Row count mismatch in column concatenation');
@@ -201,10 +191,6 @@ class Matrix {
   }
 
   /// Extracts the main diagonal as a list.
-  ///
-  /// Used for:
-  /// - computing standard errors
-  /// - extracting variance terms
   List<double> diagonal() {
     final n = rows < cols ? rows : cols;
 

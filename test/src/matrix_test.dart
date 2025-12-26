@@ -1,4 +1,4 @@
-import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
+import 'package:multivariate_linear_regression/src/svd/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {

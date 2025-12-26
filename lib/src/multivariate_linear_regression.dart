@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs
 import 'dart:math';
-import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
-import 'package:multivariate_linear_regression/src/utils/svd/pseudo_inverse.dart';
-import 'package:multivariate_linear_regression/src/utils/svd/svd.dart';
+import 'package:multivariate_linear_regression/src/svd/matrix.dart';
+import 'package:multivariate_linear_regression/src/svd/pseudo_inverse.dart';
+import 'package:multivariate_linear_regression/src/svd/svd.dart';
 
 /// Author: Ebenmelu Ifechukwu (@noahweasley)
 ///

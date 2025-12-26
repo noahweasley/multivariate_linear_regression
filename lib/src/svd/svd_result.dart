@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:multivariate_linear_regression/src/utils/constants.dart';
-import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
+import 'package:multivariate_linear_regression/src/svd/matrix.dart';
 
 /// Holds the result of a Singular Value Decomposition (SVD).
 class SVDResult {

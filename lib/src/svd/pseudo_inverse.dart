@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
-import 'package:multivariate_linear_regression/src/utils/svd/svd.dart';
+import 'package:multivariate_linear_regression/src/svd/matrix.dart';
+import 'package:multivariate_linear_regression/src/svd/svd.dart';
 
 extension MatrixPseudoInverse on Matrix {
   /// Moore–Penrose pseudoinverse using **Golub–Reinsch SVD**.

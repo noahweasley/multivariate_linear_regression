@@ -1,5 +1,5 @@
-import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
-import 'package:multivariate_linear_regression/src/utils/svd/pseudo_inverse.dart';
+import 'package:multivariate_linear_regression/src/svd/matrix.dart';
+import 'package:multivariate_linear_regression/src/svd/pseudo_inverse.dart';
 import 'package:test/test.dart';
 
 void main() {
