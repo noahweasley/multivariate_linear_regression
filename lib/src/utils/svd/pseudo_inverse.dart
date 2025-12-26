@@ -8,11 +8,6 @@ extension MatrixPseudoInverse on Matrix {
   ///
   /// This matches **ml-matrix** and LAPACK behavior:
   ///   A⁺ = V Σ⁺ Uᵀ
-  ///
-  /// Recommended for:
-  /// - regression
-  /// - rank-deficient matrices
-  /// - production use
   Matrix pseudoInverse({
     double threshold = double.minPositive,
   }) {
@@ -25,7 +20,7 @@ extension MatrixPseudoInverse on Matrix {
 
     final U = results.leftSingleVectors;
     final V = results.rightSingularVectors;
-    final s = List<double>.from(results.singularValues);
+    final s = results.singularValues;
 
     for (var i = 0; i < s.length; i++) {
       if (s[i].abs() > threshold) {
@@ -35,7 +30,6 @@ extension MatrixPseudoInverse on Matrix {
       }
     }
 
-    // A⁺ = V Σ⁺ Uᵀ
     return V.multiply(Matrix.diag(s)).multiply(U.transpose());
   }
 }

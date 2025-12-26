@@ -1,21 +1,11 @@
-// ignore_for_file: avoid_print
 import 'package:multivariate_linear_regression/multivariate_linear_regression.dart';
 
 void main() {
   final x = [
     [0.0, 0.0],
-    [
-      1.0,
-      2.0,
-    ],
-    [
-      2.0,
-      3.0,
-    ],
-    [
-      3.0,
-      4.0,
-    ],
+    [1.0, 2.0],
+    [2.0, 3.0],
+    [3.0, 4.0],
   ];
 
   final y = [
@@ -30,5 +20,6 @@ void main() {
     y: y,
   );
 
+  // ignore: avoid_print
   print(mlr.predict([3.0, 3.0]));
 }

@@ -4,13 +4,28 @@ import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
 import 'package:multivariate_linear_regression/src/utils/svd/pseudo_inverse.dart';
 import 'package:multivariate_linear_regression/src/utils/svd/svd.dart';
 
-/// Author: Ebenmelu Ifechukwu @noahweasley
+/// Author: Ebenmelu Ifechukwu (@noahweasley)
 ///
-/// {@template multivariate_linear_regression}
-/// Multivariate linear regression with optional intercept implemented using Golub-Reinsch Singular Value Decomposition.
-/// {@endtemplate}
+/// Multivariate linear regression implemented using Golub-Reinsch Singular Value Decomposition
+/// (SVD) to improve numerical stability.
+///
+/// The regression solves the normal equation:
+///
+///   beta = inverse(transpose(X) * X) * transpose(X) * Y
+///
+/// where:
+/// - X is the input (design) matrix
+/// - Y is the output matrix
+/// - beta is the coefficient matrix
 class MultivariateLinearRegression {
-  /// {@macro multivariate_linear_regression}
+  /// Creates a multivariate linear regression model.
+  ///
+  /// x: input matrix with shape (rows x features)
+  /// y: output matrix with shape (rows x outputs)
+  ///
+  /// If intercept is true, a column of ones is appended to X.
+  /// If statistics is true, variance and inference statistics
+  /// are computed.
   MultivariateLinearRegression({
     required List<List<double>> x,
     required List<List<double>> y,
@@ -24,7 +39,9 @@ class MultivariateLinearRegression {
     _y = Matrix.fromList(y);
 
     if (intercept) {
-      final ones = Matrix.fromList(List.generate(_x.rows, (_) => [1.0]));
+      final ones = Matrix.fromList(
+        List.generate(_x.rows, (_) => [1.0]),
+      );
       _x = _x.appendColumn(ones);
     }
 
@@ -38,6 +55,7 @@ class MultivariateLinearRegression {
     }
   }
 
+  /// Recreates a model using the original training data.
   factory MultivariateLinearRegression.load(
     MultivariateLinearRegression model,
   ) {
@@ -49,28 +67,53 @@ class MultivariateLinearRegression {
     );
   }
 
+  /// Design matrix X
   late Matrix _x;
+
+  /// Output matrix Y
   late Matrix _y;
+
+  /// Coefficient matrix beta
   late Matrix _beta;
 
+  /// Number of input features
   late int _inputs;
+
+  /// Number of output variables
   late int _outputs;
 
+  /// Residual variance
   double? _variance;
 
+  /// Original input data
   late List<List<double>> _originalX;
+
+  /// Original output data
   late List<List<double>> _originalY;
 
+  /// Whether an intercept column is used
   final bool intercept;
+
+  /// Whether statistics are computed
   final bool statistics;
 
+  /// Number of input features
   int get inputs => _inputs;
+
+  /// Number of output variables
   int get outputs => _outputs;
 
+  /// Regression coefficients
   List<List<double>> get weights => _beta.toList();
 
+  /// Standard error of the regression
   double? get stdError => _variance == null ? null : sqrt(_variance!);
 
+  /// Covariance matrix of coefficients
+  ///
+  /// cov(beta) = variance * inverse(transpose(X) * X)
+  ///
+  /// Throws StateError if statistics are disabled.
   Matrix get stdErrorMatrix {
     if (_variance == null) {
       throw StateError('Statistics disabled');
@@ -80,8 +123,12 @@ class MultivariateLinearRegression {
     return xtxInv.scale(_variance!);
   }
 
+  /// Standard error for each coefficient
   List<double> get stdErrors => stdErrorMatrix.diagonal().map(sqrt).toList();
 
+  /// t-statistics for each coefficient
+  ///
+  /// t = beta / standard_error
   List<double> get tStats {
     final errors = stdErrors;
     final coefficient = weights;
@@ -92,6 +139,15 @@ class MultivariateLinearRegression {
     });
   }
 
+  /// Computes regression coefficients.
+  ///
+  /// Steps:
+  /// 1. Xt  = transpose(X)
+  /// 2. XtX = Xt * X
+  /// 3. XtY = Xt * Y
+  /// 4. beta = inverse(XtX) * XtY
+  ///
+  /// The inverse is computed using SVD.
   Matrix _computeBeta() {
     final xt = _x.transpose();
     final xx = xt.multiply(_x);
@@ -103,16 +159,32 @@ class MultivariateLinearRegression {
     return xy.transpose().multiply(invxx).transpose();
   }
 
+  /// Computes residual variance.
+  ///
+  /// residual = actual - predicted
+  ///
+  /// variance =
+  ///   sum(residual * residual) /
+  ///   (number_of_rows - number_of_columns)
   double _computeVariance() {
     final fitted = _x.multiply(_beta);
     final residuals = _y.clone().add(fitted.neg());
 
-    return residuals.toList().fold(0.0, (result, residual) => result + pow(residual[0], 2)) / (_y.rows - _x.cols);
+    return residuals.toList().fold(
+              0.0,
+              (result, residual) => result + pow(residual[0], 2),
+            ) /
+        (_y.rows - _x.cols);
   }
 
+  /// Predicts output values for a single input vector.
+  ///
+  /// Throws ArgumentError if input size is incorrect.
   List<double> predict(List<double> x) {
     if (x.length != inputs) {
-      throw ArgumentError('Expected $inputs inputs, got ${x.length}');
+      throw ArgumentError(
+        'Expected $inputs inputs, got ${x.length}',
+      );
     }
 
     final result = List<double>.filled(outputs, 0.0);
@@ -132,8 +204,13 @@ class MultivariateLinearRegression {
     return result;
   }
 
-  List<List<double>> predictBatch(List<List<double>> x) => x.map(predict).toList();
+  /// Predicts outputs for multiple input rows.
+  List<List<double>> predictBatch(
+    List<List<double>> x,
+  ) =>
+      x.map(predict).toList();
 
+  /// Converts the model to a JSON-compatible map.
   Map<String, dynamic> toJson() {
     return {
       'name': 'multivariateLinearRegression',
@@ -146,14 +223,17 @@ class MultivariateLinearRegression {
               'regressionStatistics': {
                 'standardError': stdError,
               },
-              'variables': List.generate(weights.length, (i) {
-                return {
-                  'label': i == weights.length - 1 ? 'Intercept' : 'X${i + 1}',
-                  'coefficients': weights[i],
-                  'standardError': stdErrors[i],
-                  'tStat': tStats[i],
-                };
-              }),
+              'variables': List.generate(
+                weights.length,
+                (i) {
+                  return {
+                    'label': i == weights.length - 1 ? 'Intercept' : 'X${i + 1}',
+                    'coefficients': weights[i],
+                    'standardError': stdErrors[i],
+                    'tStat': tStats[i],
+                  };
+                },
+              ),
             }
           : null,
     };
