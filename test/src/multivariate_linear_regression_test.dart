@@ -76,7 +76,6 @@ void main() {
       expect(p2, [7, 10, 18]);
     });
 
-    // x02 dataset test (single output)
     test('works with 2 inputs and 1 output (x02)', () {
       final x02X = x02Data['x']!;
       final x02Y = x02Data['y']!;
@@ -87,7 +86,6 @@ void main() {
       expect(prediction[0][0], closeTo(38.05, 0.01));
     });
 
-    // x42 dataset test
     test('works with 2 inputs and 1 output (x42)', () {
       final x42X = x42Data['x']!;
       final x42Y = x42Data['y']!;
@@ -128,7 +126,7 @@ void main() {
         ],
       );
 
-      final json = mlr.toJson();
+      // final json = mlr.toJson();
       final loaded = MultivariateLinearRegression.load(mlr);
 
       final p = loaded.predict([2, 3]).map((e) => e.round()).toList();
@@ -141,6 +139,7 @@ void main() {
         [208.3],
         [3400.0],
       ];
+
       final Y = [
         [0.51],
         [105.66],
@@ -229,7 +228,6 @@ void main() {
       expect(vars[1]['coefficients'][0], closeTo(5.25, 0.01));
       expect(vars[1]['standardError'], closeTo(2.43, 0.01));
       expect(vars[1]['tStat'], closeTo(2.16, 0.01));
-
       expect(vars[2]['label'], 'Intercept');
       expect(vars[2]['coefficients'][0], closeTo(13.75, 0.01));
       expect(vars[2]['standardError'], closeTo(7.81, 0.01));

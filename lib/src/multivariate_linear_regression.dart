@@ -1,12 +1,13 @@
+// ignore_for_file: public_member_api_docs
 import 'dart:math';
-import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
-import 'package:multivariate_linear_regression/src/utils/matrix_ext.dart';
+import 'package:multivariate_linear_regression/src/utils/svd/matrix.dart';
+import 'package:multivariate_linear_regression/src/utils/svd/pseudo_inverse.dart';
+import 'package:multivariate_linear_regression/src/utils/svd/svd.dart';
 
 /// Author: Ebenmelu Ifechukwu @noahweasley
 ///
 /// {@template multivariate_linear_regression}
-/// Multivariate linear regression with optional intercept.
+/// Multivariate linear regression with optional intercept implemented using Golub-Reinsch Singular Value Decomposition.
 /// {@endtemplate}
 class MultivariateLinearRegression {
   /// {@macro multivariate_linear_regression}
@@ -23,12 +24,12 @@ class MultivariateLinearRegression {
     _y = Matrix.fromList(y);
 
     if (intercept) {
-      final ones = Vector.filled(_x.rowCount, 1);
-      _x = _x.insertColumns(_x.columnCount, [ones]);
+      final ones = Matrix.fromList(List.generate(_x.rows, (_) => [1.0]));
+      _x = _x.appendColumn(ones);
     }
 
-    _inputs = _x.columnCount - (intercept ? 1 : 0);
-    _outputs = _y.columnCount;
+    _inputs = _x.cols - (intercept ? 1 : 0);
+    _outputs = _y.cols;
 
     _beta = _computeBeta();
 
@@ -37,8 +38,9 @@ class MultivariateLinearRegression {
     }
   }
 
-  /// Load previous model
-  factory MultivariateLinearRegression.load(MultivariateLinearRegression model) {
+  factory MultivariateLinearRegression.load(
+    MultivariateLinearRegression model,
+  ) {
     return MultivariateLinearRegression(
       x: model._originalX,
       y: model._originalY,
@@ -49,89 +51,89 @@ class MultivariateLinearRegression {
 
   late Matrix _x;
   late Matrix _y;
-  late final Matrix _beta;
+  late Matrix _beta;
 
-  late final int _inputs;
-  late final int _outputs;
+  late int _inputs;
+  late int _outputs;
 
   double? _variance;
 
   late List<List<double>> _originalX;
   late List<List<double>> _originalY;
 
-  ///
   final bool intercept;
-
-  ///
   final bool statistics;
 
-  ///
   int get inputs => _inputs;
-
-  ///
   int get outputs => _outputs;
 
-  /// Regression coefficients (features × outputs)
-  List<Iterable<double>> get weights => _beta.toList();
+  List<List<double>> get weights => _beta.toList();
 
-  /// Standard error (square root of variance)
   double? get stdError => _variance == null ? null : sqrt(_variance!);
 
-  /// Standard Error Matrix used for coefficient statistics
-  Matrix get stdErrorMatrix => (_x.transpose() * _x).pseudoInverse() * (_variance ?? 0);
+  Matrix get stdErrorMatrix {
+    if (_variance == null) {
+      throw StateError('Statistics disabled');
+    }
 
-  /// Standard errors for each coefficient
-  List<double> get stdErrors => stdErrorMatrix.diagonal().map((d) => sqrt(d)).toList();
+    final xtxInv = _x.transpose().multiply(_x).pseudoInverse();
+    return xtxInv.scale(_variance!);
+  }
 
-  /// t-statistics for each coefficient
+  List<double> get stdErrors => stdErrorMatrix.diagonal().map(sqrt).toList();
+
   List<double> get tStats {
     final errors = stdErrors;
+    final coefficient = weights;
 
-    return List.generate(weights.length, (i) {
-      final coefficient = weights[i].first;
-      return errors[i] == 0 ? 0.0 : coefficient / errors[i];
+    return List.generate(coefficient.length, (i) {
+      final beta = coefficient[i][0];
+      return errors[i] == 0 ? 0.0 : beta / errors[i];
     });
   }
 
-  Matrix _computeBeta() => _x.pseudoInverse() * _y;
+  Matrix _computeBeta() {
+    final xt = _x.transpose();
+    final xx = xt.multiply(_x);
+    final xy = xt.multiply(_y);
 
-  double _computeVariance() {
-    final fittedValues = _x * _beta;
-    final residuals = _y - fittedValues;
+    final svdResults = GolubReinschSVD.decompose(xx).results;
+    final invxx = svdResults.inverse();
 
-    //  final squaredSum = residuals.toList().expand((ri) => ri).map((v) => v * v).reduce((a, b) => a + b);
-    final squaredSum = residuals.toList().map((ri) => pow(ri.first, 2)).reduce((a, b) => a + b);
-
-    return squaredSum / (_y.rowCount - _x.columnCount);
+    return xy.transpose().multiply(invxx).transpose();
   }
 
-  ///
-  List<double> predict(List<double> x) {
-    final result = List<double>.filled(outputs, 0);
+  double _computeVariance() {
+    final fitted = _x.multiply(_beta);
+    final residuals = _y.clone().add(fitted.neg());
 
+    return residuals.toList().fold(0.0, (result, residual) => result + pow(residual[0], 2)) / (_y.rows - _x.cols);
+  }
+
+  List<double> predict(List<double> x) {
     if (x.length != inputs) {
       throw ArgumentError('Expected $inputs inputs, got ${x.length}');
     }
 
+    final result = List<double>.filled(outputs, 0.0);
+
     if (intercept) {
-      for (var i = 0; i < outputs; i++) {
-        result[i] = _beta[inputs][i];
+      for (var j = 0; j < outputs; j++) {
+        result[j] = _beta.get(inputs, j);
       }
     }
 
     for (var i = 0; i < inputs; i++) {
       for (var j = 0; j < outputs; j++) {
-        result[j] += _beta[i][j] * x[i];
+        result[j] += _beta.get(i, j) * x[i];
       }
     }
 
     return result;
   }
 
-  ///
   List<List<double>> predictBatch(List<List<double>> x) => x.map(predict).toList();
 
-  ///
   Map<String, dynamic> toJson() {
     return {
       'name': 'multivariateLinearRegression',
@@ -143,11 +145,10 @@ class MultivariateLinearRegression {
           ? {
               'regressionStatistics': {
                 'standardError': stdError,
-                'observations': outputs,
               },
               'variables': List.generate(weights.length, (i) {
                 return {
-                  'label': i == weights.length - 1 ? 'Intercept' : 'X Variable ${i + 1}',
+                  'label': i == weights.length - 1 ? 'Intercept' : 'X${i + 1}',
                   'coefficients': weights[i],
                   'standardError': stdErrors[i],
                   'tStat': tStats[i],

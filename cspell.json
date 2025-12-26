@@ -20,12 +20,23 @@
   "useGitignore": true,
   "words": [
     "Ebenmelu",
+    "Eigen",
     "endtemplate",
+    "Golub",
     "Ifechukwu",
     "invxx",
+    "kase",
+    "LAPACK",
     "linalg",
     "mocktail",
     "multivariate_linear_regression",
-    "noahweasley"
+    "noahweasley",
+    "Penrose",
+    "pseudoinverse",
+    "Reinsch",
+    "Splus",
+    "Ucols",
+    "Urows",
+    "Vcols"
   ]
 }
