@@ -1,0 +1,5 @@
+.vscode/
+.github/
+.test/
+coverage_badge.svg
+cspell.json
