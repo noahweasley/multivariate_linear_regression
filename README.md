@@ -47,8 +47,62 @@ void main() {
   );
 
   print(mlr.predict([3.0, 3.0]));
+  print(mlr.predictBatch([[1.0, 2.0], [2.0, 3.0]]));
+  print(mlr.weights);
+  print(mlr.stdError);
+  print(mlr.stdErrors);
+  print(mlr.tStats);
+  print(mlr.toJson());
 }
 ```
+
+---
+
+## API Overview
+
+- `MultivariateLinearRegression({x, y, intercept = true, statistics = true})`
+
+  - Creates a regression model.
+  - `x`: List of input rows.
+  - `y`: List of output rows.
+  - `intercept`: Whether to include an intercept column.
+  - `statistics`: Whether to compute variance, standard errors, and t-stats.
+
+- `MultivariateLinearRegression.load(model)`
+
+  - Recreates a model using the original training data.
+
+- `predict(List<double> x)`
+
+  - Predicts outputs for a single input vector.
+
+- `predictBatch(List<List<double>> x)`
+
+  - Predicts outputs for multiple input rows.
+
+- `weights`
+
+  - Returns the regression coefficients.
+
+- `stdError`
+
+  - Standard error of the regression.
+
+- `stdErrors`
+
+  - Standard error for each coefficient.
+
+- `tStats`
+
+  - t-statistics for each coefficient.
+
+- `stdErrorMatrix`
+
+  - Covariance matrix of coefficients (requires `statistics = true`).
+
+- `toJson()`
+
+  - Converts the model to a JSON-compatible map, including regression statistics if enabled.
 
 ---
 
@@ -59,6 +113,8 @@ Multivariate Linear Regression comes with a built-in [GitHub Actions workflow][g
 On each pull request and push, the CI formats, lints, and tests the code.
 The project uses [Very Good Analysis][very_good_analysis_link] for a strict set of analysis rules.
 Code coverage is enforced using [Very Good Coverage][very_good_coverage_link].
+
+> **Note:** The coverage is currently at 96% due to a few small utility paths in SVD computations that are difficult to trigger via unit tests.
 
 ---
 
