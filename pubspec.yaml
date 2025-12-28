@@ -2,7 +2,7 @@ name: multivariate_linear_regression
 description: Multivariate linear regression for Dart with support for multiple outputs and optional intercept.
 version: 0.1.0
 homepage: https://github.com/noahweasley/Multivariate-Linear-Regression
-repository: https://github.com/noahweasley/multivariate_linear_regression
+repository: https://github.com/noahweasley/Multivariate-Linear-Regression
 
 environment:
   sdk: ">=3.1.3 <4.0.0"

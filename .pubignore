@@ -1,5 +1,13 @@
+// Irrelevant files and folders
 .vscode/
 .github/
-.test/
+test/
 coverage_badge.svg
 cspell.json
+
+# Files and directories created by pub
+.dart_tool/
+.packages
+build/
+pubspec.lock
+coverage/
