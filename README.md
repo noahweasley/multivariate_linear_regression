@@ -7,6 +7,8 @@
 
 Multivariate linear regression for Dart with support for multiple outputs and optional intercept.
 
+> **Inspired by [ml-matrix](https://github.com/mljs/matrix) and [regression-multivariate-linear](https://github.com/mljs/multivariate-linear-regression) Node.js libraries.**
+
 ---
 
 ## Installation
