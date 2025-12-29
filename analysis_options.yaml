@@ -11,11 +11,13 @@ analyzer:
     - lib/api/models/responses/**/*.g.dart
     - lib/api/models/requests/**/*.g.dart
     - lib/generated/**
+  errors:
+    invalid_annotation_target: ignore
 
 linter:
   rules:
     public_member_api_docs: true
-    lines_longer_than_80_chars: ignore
+    lines_longer_than_80_chars: false
     prefer_final_fields: true
     prefer_single_quotes: true
     prefer_interpolation_to_compose_strings: true
@@ -31,7 +33,6 @@ linter:
     hash_and_equals: true
     implementation_imports: true
     null_closures: true
-    package_api_docs: true
     slash_for_doc_comments: true
     test_types_in_equals: true
     throw_in_finally: true
@@ -40,5 +41,3 @@ linter:
     prefer_final_locals: true
     use_super_parameters: true
     prefer_const_constructors_in_immutables: true
-  errors:
-    invalid_annotation_target: ignore
