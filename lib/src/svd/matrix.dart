@@ -67,7 +67,7 @@ class Matrix {
   /// Creates an `n × n` identity matrix.
   ///
   /// Identity matrix `I` satisfies:
-  /// ```
+  /// ```dart
   /// A × I = I × A = A
   /// ```
   factory Matrix.identity(int n) {
@@ -213,7 +213,7 @@ class Matrix {
   /// Adds another matrix element-wise.
   ///
   /// Example:
-  /// ```
+  /// ```dart
   /// C = A.add(B)
   /// ```
   Matrix add(Matrix B) {
@@ -235,7 +235,7 @@ class Matrix {
   /// Negates the matrix (equivalent to multiplying by -1).
   ///
   /// Example:
-  /// ```
+  /// ```dart
   /// C = A.neg()
   /// ```
   Matrix neg() {
