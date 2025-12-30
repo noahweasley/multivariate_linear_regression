@@ -1,6 +1,6 @@
+import 'package:multivariate_linear_regression/multivariate_linear_regression.dart';
 import 'package:test/test.dart';
 
-import '../../lib/multivariate_linear_regression.dart';
 import '../utils/csv.dart';
 
 void main() {
@@ -14,7 +14,7 @@ void main() {
     });
 
     test('should work with large dataset with intercept', () {
-      final mlr = MultivariateLinearRegression(x: x, y: y, intercept: true);
+      final mlr = MultivariateLinearRegression(x: x, y: y);
 
       expect(
         mlr.predict(x[0]).map((e) => e.round()).toList(),

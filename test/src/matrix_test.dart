@@ -234,7 +234,7 @@ void main() {
         [3.4567, 4.5678],
       ]);
 
-      final expected = '| 1.23\t2.35 |\n| 3.46\t4.57 |\n';
+      const expected = '| 1.23\t2.35 |\n| 3.46\t4.57 |\n';
 
       expect(A.toString(), equals(expected));
     });

@@ -9,17 +9,6 @@
 /// - No assumption of squareness
 /// - JS `ml-matrix` parity
 class Matrix {
-  /// Number of rows (m)
-  final int rows;
-
-  /// Number of columns (n)
-  final int cols;
-
-  /// Internal row-major storage
-  ///
-  /// `_d[i][j]` represents the element at row `i`, column `j`.
-  final List<List<double>> _d;
-
   /// Internal constructor.
   ///
   /// Assumes the data is already validated and rectangular.
@@ -85,6 +74,17 @@ class Matrix {
 
     return D;
   }
+
+  /// Number of rows (m)
+  final int rows;
+
+  /// Number of columns (n)
+  final int cols;
+
+  /// Internal row-major storage
+  ///
+  /// `_d[i][j]` represents the element at row `i`, column `j`.
+  final List<List<double>> _d;
 
   /// Returns the element at row `r`, column `c`.
   double get(int r, int c) => _d[r][c];
@@ -191,7 +191,7 @@ class Matrix {
 
   /// Clones the current Matrix
   Matrix clone() {
-    return Matrix.fromList(this.toList());
+    return Matrix.fromList(toList());
   }
 
   /// Multiplies every element of the matrix by a scalar.
@@ -236,7 +236,7 @@ class Matrix {
   /// C = A.neg()
   /// ```
   Matrix neg() {
-    return this.scale(-1.0);
+    return scale(-1.0);
   }
 
   /// Outputs a human-readable format

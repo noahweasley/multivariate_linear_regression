@@ -25,18 +25,18 @@ linter:
     implementation_imports: true
     null_closures: true
     # Disable new vg cli rules start
-    prefer_int_literals: false
     omit_local_variable_types: false
-    sort_constructors_first: false
+    prefer_int_literals: false
     require_trailing_commas: false
-    unnecessary_this: false
-    avoid_redundant_argument_values: false
     avoid_multiple_declarations_per_line: false
-    prefer_const_declarations: false
-    unnecessary_new: false
-    directives_ordering: false
-    avoid_relative_lib_imports: false
     # Disable new vg cli rules stop
+    sort_constructors_first: true
+    unnecessary_this: true
+    avoid_redundant_argument_values: true
+    prefer_const_declarations: true
+    avoid_relative_lib_imports: true
+    directives_ordering: true
+    unnecessary_new: true
     slash_for_doc_comments: true
     test_types_in_equals: true
     throw_in_finally: true

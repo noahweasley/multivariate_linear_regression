@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_dynamic_calls
 
+import 'package:multivariate_linear_regression/multivariate_linear_regression.dart';
 import 'package:test/test.dart';
-import '../../lib/multivariate_linear_regression.dart';
+
 import '../data/x02.dart';
 import '../data/x42.dart';
 
@@ -44,7 +45,6 @@ void main() {
           [4, 6, 5],
           [6, 8, 7],
         ],
-        intercept: true,
       );
 
       final p1 = mlr.predict([2, 3]).map((e) => e.round()).toList();
@@ -68,7 +68,6 @@ void main() {
           [3, 8, 15],
           [5, 10, 17],
         ],
-        intercept: true,
       );
 
       final p1 = mlr.predict([2, 3]).map((e) => e.round()).toList();
@@ -148,7 +147,7 @@ void main() {
         [1800.0],
       ];
 
-      final mlr = MultivariateLinearRegression(x: X, y: Y, intercept: true);
+      final mlr = MultivariateLinearRegression(x: X, y: Y);
       final weights = mlr.weights.map((row) => row.toList()).toList();
 
       expect(weights[0][0], closeTo(0.53, 0.01));

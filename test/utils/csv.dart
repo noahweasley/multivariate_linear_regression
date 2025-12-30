@@ -8,7 +8,6 @@ List<List<double>> readCsv(String path) {
   final input = File(path).readAsStringSync();
 
   final rows = const CsvToListConverter(
-    fieldDelimiter: ',',
     shouldParseNumbers: true,
   ).convert(input);
 

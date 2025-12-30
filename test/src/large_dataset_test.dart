@@ -9,7 +9,7 @@ import '../data/y_train_matrix_2.dart';
 void main() {
   group('Large Dataset Test', () {
     test('should work with large dataset with intercept', () {
-      final mlr = new MultivariateLinearRegression(x: xTrainMatrix1, y: yTrainMatrix1, intercept: true);
+      final mlr = MultivariateLinearRegression(x: xTrainMatrix1, y: yTrainMatrix1);
 
       expect(
         mlr.predict(xTrainMatrix1[0]).map((e) => e.round()).toList(),
@@ -54,7 +54,7 @@ void main() {
         164: -71,
       };
 
-      final mlr = new MultivariateLinearRegression(x: xTrainMatrix2, y: yTrainMatrix2, intercept: false);
+      final mlr = MultivariateLinearRegression(x: xTrainMatrix2, y: yTrainMatrix2, intercept: false);
 
       testCases.forEach((index, expected) {
         final prediction = mlr.predict(xTrainMatrix2[index]).map((e) => e.round()).toList();

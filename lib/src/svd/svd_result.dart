@@ -5,6 +5,30 @@ import 'package:multivariate_linear_regression/src/utils/constants.dart';
 
 /// Holds the result of a Singular Value Decomposition (SVD).
 class SVDResult {
+  /// Creates an immutable container for the result of a
+  /// Singular Value Decomposition (SVD).
+  ///
+  /// The decomposition satisfies:
+  ///
+  /// `A = U * Σ * Vᵀ`
+  ///
+  /// where:
+  /// - [leftSingleVectors] (`U`) contains the left singular vectors
+  /// - [rightSingularVectors] (`V`) contains the right singular vectors
+  /// - [singularValues] contains the diagonal values of `Σ` in
+  ///   descending order
+  /// - [rows] is the number of rows of the original matrix `A`
+  /// - [cols] is the number of columns of the original matrix `A`
+  ///
+  /// All inputs are assumed to be valid and dimensionally consistent.
+  SVDResult({
+    required this.leftSingleVectors,
+    required this.rightSingularVectors,
+    required this.singularValues,
+    required this.rows,
+    required this.cols,
+  });
+
   /// Left singular vectors (m × n)
   final Matrix leftSingleVectors;
 
@@ -19,15 +43,6 @@ class SVDResult {
 
   /// column count
   final int cols;
-
-  ///
-  SVDResult({
-    required this.leftSingleVectors,
-    required this.rightSingularVectors,
-    required this.singularValues,
-    required this.rows,
-    required this.cols,
-  });
 
   /// condition number
   double get condition {

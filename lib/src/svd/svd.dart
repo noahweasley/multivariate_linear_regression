@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs
+// ignore_for_file: sort_constructors_first
 import 'dart:math';
 
 import 'package:multivariate_linear_regression/src/svd/matrix.dart';
@@ -6,14 +6,43 @@ import 'package:multivariate_linear_regression/src/svd/svd_result.dart';
 import 'package:multivariate_linear_regression/src/utils/constants.dart';
 import 'package:multivariate_linear_regression/src/utils/utils.dart';
 
+/// Computes the Singular Value Decomposition (SVD) of a matrix using the
+/// Golub–Reinsch algorithm.
+///
+/// Given a matrix `A` with dimensions `m × n`, the decomposition satisfies:
+///
+/// `A = U * Σ * Vᵀ`
+///
+/// where:
+/// - `U` is an `m × min(m, n)` matrix of left singular vectors
+/// - `Σ` is a diagonal matrix containing the singular values
+/// - `V` is an `n × n` matrix of right singular vectors
+///
+/// This implementation is numerically stable and suitable for
+/// least-squares problems, pseudo-inverse computation, and
+/// multivariate linear regression.
 class GolubReinschSVD {
+  /// The result of the SVD computation.
+  ///
+  /// Contains the left and right singular vectors, singular values,
+  /// and derived numerical properties such as rank and condition number.
   final SVDResult results;
 
-  /// private constructor use `GolubReinschSVD.decompose()`
+  /// Internal constructor.
+  ///
+  /// Use `GolubReinschSVD.decompose` to perform an SVD.
   GolubReinschSVD._({required this.results});
 
+  /// Computes the Singular Value Decomposition of the given matrix.
+  ///
+  /// Throws an [ArgumentError] if the matrix is empty.
+  ///
+  /// The returned [GolubReinschSVD] instance exposes the decomposition
+  /// through the [results] property.
+  ///
+  /// This method follows the classical Golub–Reinsch algorithm
   factory GolubReinschSVD.decompose(Matrix A) {
-    final eps = epsilon;
+    const eps = epsilon;
     final m = A.rows;
     final n = A.cols;
 
