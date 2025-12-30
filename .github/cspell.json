@@ -15,5 +15,26 @@
     }
   ],
   "useGitignore": true,
-  "words": ["endtemplate", "invxx", "linalg", "multivariate_linear_regression"]
+  "words": [
+    "diagonalization",
+    "Ebenmelu",
+    "Eigen",
+    "endtemplate",
+    "Golub",
+    "Ifechukwu",
+    "invxx",
+    "kase",
+    "LAPACK",
+    "linalg",
+    "mocktail",
+    "multivariate_linear_regression",
+    "noahweasley",
+    "Penrose",
+    "pseudoinverse",
+    "Reinsch",
+    "Splus",
+    "Ucols",
+    "Urows",
+    "Vcols"
+  ]
 }
