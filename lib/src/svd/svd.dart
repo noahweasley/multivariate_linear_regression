@@ -297,6 +297,7 @@ class GolubReinschSVD {
 
               for (var i = 0; i < n; i++) {
                 t = cs * V.get(i, j) + sn * V.get(i, p - 1);
+
                 V
                   ..set(i, p - 1, -sn * V.get(i, j) + cs * V.get(i, p - 1))
                   ..set(i, j, t);

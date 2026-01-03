@@ -5,7 +5,7 @@
 [![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)][mason_link]
 [![License: MIT][license_badge]][license_link]
 
-Multivariate linear regression for Dart with support for multiple outputs and optional intercept.
+Multivariate linear regression for Dart with support for multiple outputs and optional intercept, implemented using Golub-Reinsch Singular Value Decomposition.
 
 > **Inspired by [ml-matrix](https://github.com/mljs/matrix) and [regression-multivariate-linear](https://github.com/mljs/regression-multivariate-linear) Node.js libraries.**
 
