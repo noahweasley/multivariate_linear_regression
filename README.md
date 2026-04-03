@@ -1,9 +1,9 @@
 # Multivariate Linear Regression
 
-[Style: very good analysis][very_good_analysis_link]
+[![Style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 ![Test Coverage](https://img.shields.io/badge/Test%20coverage-96.4%25-green)
-[Powered by Mason][mason_link]
-[License: MIT][license_link]
+[![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)][mason_link]
+[![License: MIT][license_badge]][license_link]
 
 Multivariate linear regression for Dart with support for multiple outputs and optional intercept, implemented using Golub-Reinsch Singular Value Decomposition.
 
@@ -85,10 +85,10 @@ Creates a multivariate linear regression model.
 ### Load Existing Model
 
 ```dart
-MultivariateLinearRegression.load(Map<String, dynamic> model)
+factory MultivariateLinearRegression.load(MultivariateLinearRegression model)
 ```
 
-Reconstructs a trained model from serialized data (e.g., output of `toJson()`).
+Reconstructs a trained model from previously trained model
 
 ---
 
@@ -187,12 +187,10 @@ open coverage/index.html
 
 If you find this package useful, please consider supporting it:
 
-- Like the [package on pub.dev](pub_dev_link)
-- Star the [GitHub repository](github_link)
+- Like the [package on pub.dev](https://pub.dev/packages/multivariate_linear_regression)
+- Star the [GitHub repository](https://github.com/noahweasley/Multivariate-Linear-Regression)
 
 Your support helps improve the project and keeps it actively maintained 😊
-
----
 
 [dart_install_link]: https://dart.dev/get-dart
 [github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
@@ -203,5 +201,3 @@ Your support helps improve the project and keeps it actively maintained 😊
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
 [very_good_coverage_link]: https://github.com/marketplace/actions/very-good-coverage
 [very_good_workflows_link]: https://github.com/VeryGoodOpenSource/very_good_workflows
-[pub_dev_link]: https://pub.dev/packages/multivariate_linear_regression
-[github_link]: https://github.com/noahweasley/Multivariate-Linear-Regression
