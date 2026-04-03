@@ -1,9 +1,9 @@
 # Multivariate Linear Regression
 
-[![Style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
+[Style: very good analysis][very_good_analysis_link]
 ![Test Coverage](https://img.shields.io/badge/Test%20coverage-96.4%25-green)
-[![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)][mason_link]
-[![License: MIT][license_badge]][license_link]
+[Powered by Mason][mason_link]
+[License: MIT][license_link]
 
 Multivariate linear regression for Dart with support for multiple outputs and optional intercept, implemented using Golub-Reinsch Singular Value Decomposition.
 
@@ -62,49 +62,95 @@ void main() {
 
 ## API Overview
 
-- `MultivariateLinearRegression({x, y, intercept = true, statistics = true})`
+### Constructor
 
-  - Creates a regression model.
-  - `x`: List of input rows.
-  - `y`: List of output rows.
-  - `intercept`: Whether to include an intercept column.
-  - `statistics`: Whether to compute variance, standard errors, and t-stats.
+```dart
+MultivariateLinearRegression({
+  required List<List<double>> x,
+  required List<List<double>> y,
+  bool intercept = true,
+  bool statistics = true,
+})
+```
 
-- `MultivariateLinearRegression.load(model)`
+Creates a multivariate linear regression model.
 
-  - Recreates a model using the original training data.
+- `x` - Input feature matrix (rows = samples, columns = features)
+- `y` — Output matrix (rows = samples, columns = targets)
+- `intercept` — Includes a bias (intercept) term when set to `true`
+- `statistics` — Enables computation of additional metrics (standard errors, t-stats, etc.)
 
-- `predict(List<double> x)`
+---
 
-  - Predicts outputs for a single input vector.
+### Load Existing Model
 
-- `predictBatch(List<List<double>> x)`
+```dart
+MultivariateLinearRegression.load(Map<String, dynamic> model)
+```
 
-  - Predicts outputs for multiple input rows.
+Reconstructs a trained model from serialized data (e.g., output of `toJson()`).
 
-- `weights`
+---
 
-  - Returns the regression coefficients.
+### Prediction
 
-- `stdError`
+```dart
+List<double> predict(List<double> input)
+```
 
-  - Standard error of the regression.
+Returns predicted outputs for a single input vector.
 
-- `stdErrors`
+```dart
+List<List<double>> predictBatch(List<List<double>> inputs)
+```
 
-  - Standard error for each coefficient.
+Returns predictions for multiple input rows.
 
-- `tStats`
+---
 
-  - t-statistics for each coefficient.
+### Coefficients & Metrics
 
-- `stdErrorMatrix`
+```dart
+List<List<double>> get weights
+```
 
-  - Covariance matrix of coefficients (requires `statistics = true`).
+Matrix of regression coefficients (includes intercept if enabled).
 
-- `toJson()`
+```dart
+double get stdError
+```
 
-  - Converts the model to a JSON-compatible map, including regression statistics if enabled.
+Overall standard error of the model.
+
+```dart
+List<List<double>> get stdErrors
+```
+
+Standard error for each coefficient.
+
+```dart
+List<List<double>> get tStats
+```
+
+T-statistics corresponding to each coefficient.
+
+```dart
+List<List<double>> get stdErrorMatrix
+```
+
+Covariance matrix of the coefficients.
+
+> Available only when `statistics = true`
+
+---
+
+### Serialization
+
+```dart
+Map<String, dynamic> toJson()
+```
+
+Serializes the model into a JSON-compatible format, including statistics when enabled.
 
 ---
 
@@ -115,8 +161,6 @@ Multivariate Linear Regression comes with a built-in [GitHub Actions workflow][g
 On each pull request and push, the CI formats, lints, and tests the code.
 The project uses [Very Good Analysis][very_good_analysis_link] for a strict set of analysis rules.
 Code coverage is enforced using [Very Good Coverage][very_good_coverage_link].
-
-> **Note:** The coverage is currently at 96.4% due to a few small utility paths in SVD computations that are difficult to trigger via unit tests.
 
 ---
 
@@ -139,6 +183,17 @@ open coverage/index.html
 
 ---
 
+## Support
+
+If you find this package useful, please consider supporting it:
+
+- Like the [package on pub.dev](pub_dev_link)
+- Star the [GitHub repository](github_link)
+
+Your support helps improve the project and keeps it actively maintained 😊
+
+---
+
 [dart_install_link]: https://dart.dev/get-dart
 [github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
@@ -148,3 +203,5 @@ open coverage/index.html
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
 [very_good_coverage_link]: https://github.com/marketplace/actions/very-good-coverage
 [very_good_workflows_link]: https://github.com/VeryGoodOpenSource/very_good_workflows
+[pub_dev_link]: https://pub.dev/packages/multivariate_linear_regression
+[github_link]: https://github.com/noahweasley/Multivariate-Linear-Regression
